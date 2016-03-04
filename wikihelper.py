@@ -7,6 +7,7 @@ from IPython import embed
 class MWSite(object):
 
     def __init__(self):
+        # constructor
         self.site = None
         self.connect()
 
