@@ -59,6 +59,15 @@ class MWSite(object):
         if catpage_also == "y":
             self.site.Pages["Category:%s" % (category)].delete()
 
+    def rename_property(self, oldname, newname):
+        """for renaming semantic properties
+
+        Arguments:
+        oldname: The current property name
+        newname: The desired property name
+
+        """
+        pass
 
 if __name__ == '__main__':
     site = MWSite()
