@@ -59,7 +59,8 @@ class MWSite(object):
         if catpage_also == "y":
             self.site.Pages["Category:%s" % (category)].delete()
 
-    def list_allpages():
+    @property
+    def pages(self):
         """return a list of all the pages on the site"""
         allpageslist =[]
         for page in site.site.Pages: 
