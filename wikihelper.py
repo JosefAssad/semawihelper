@@ -60,6 +60,13 @@ class MWSite(object):
         if catpage_also == "y":
             self.site.Pages["Category:%s" % (category)].delete()
 
+    #return a list of all the pages on the site
+    def list_allpages():
+        allpageslist =[]
+        for page in site.site.Pages: 
+            allpageslist.append(page.page_title)
+        return allpageslist
+            
 
 if __name__ == '__main__':
     site = MWSite()
