@@ -1,23 +1,25 @@
 #!/usr/bin/env python
 
 import mwclient
-# from IPython import embed
-
+import sys
+from IPython import embed
 
 class MWSite(object):
 
+    
     def __init__(self):
         self.site = None
         self.connect()
 
     def connect(self):
-        hostname = input("Host: ")
-        path = input("Path: ")
-        username = input("User: ")
-        password = input("Pass: ")
+        hostname = input("Host:")
+        path = input("Path:")
+        username = input("User:")
+        password = input("Pass:")
         self.site = mwclient.Site((hostname), path)
         self.site.login(username, password)
 
+        
     def purge_page(self, page_title):
         """Executes a purge action on page_title.
         https://www.mediawiki.org/wiki/Manual:Purge
@@ -51,6 +53,17 @@ class MWSite(object):
         for page in self.site.Pages['Kategori:'+category]:
             print("Page: %s" % (page.page_title))
 
+    def list_category2(self, category):
+        for page in self.site.Pages['Kategori:'+category]:
+            a = (page.page_title)
+            list += [a]
+        return list
+
+    def allcategories(self):
+        """Retrieve all categories on the wiki as a generator."""
+        return self.allpages()
+
+    
     def nuke_category(self, category):
         for page in self.site.Pages['Kategori:'+category]:
             print("deleting %s..." % (page.page_title))
@@ -66,10 +79,32 @@ class MWSite(object):
         for page in site.site.Pages: 
             allpageslist.append(page.page_title)
         return allpageslist
-            
 
+    def list_allpages():
+        allpageslist =[]
+        for page in site.site.Pages: 
+            allpageslist.append(page.page_title)
+        return allpageslist
+
+    def rename_property(self, oldname, newname):
+        """for renaming semantic properties
+        Arguments:
+        oldname: The current property name
+        newname: The desired property name
+        """
+        list = []
+        list = site.list_allpages() 
+        i = 0
+        # Loop.
+        for item in list:
+        # check inside the page as a string
+            print(str(list[i]))
+            #x=site.site.Pages[page].text()
+            i +=1
+    
 if __name__ == '__main__':
     site = MWSite()
-#   embed()
+    embed()
+    
 
 
