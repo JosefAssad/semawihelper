@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import mwclient
-from IPython import embed
+# from IPython import embed
 
 
 class MWSite(object):
@@ -11,11 +11,11 @@ class MWSite(object):
         self.connect()
 
     def connect(self):
-        hostname = raw_input("Host: ")
-        path = raw_input("Path: ")
-        username = raw_input("User: ")
-        password = raw_input("Pass: ")
-        self.site = mwclient.Site(('http', hostname), path)
+        hostname = input("Host: ")
+        path = input("Path: ")
+        username = input("User: ")
+        password = input("Pass: ")
+        self.site = mwclient.Site((hostname), path)
         self.site.login(username, password)
 
     def purge_page(self, page_title):
@@ -31,7 +31,7 @@ class MWSite(object):
         page = self.site.Pages[page_title]
         text = page.text()
         page.save(text, summary=summary)
-        print "Page %s nulledited." % (page_title)
+        print("Page %s nulledited." % (page_title))
 
     def nulledit_category(self, category_name, summary):
         """Useful for those times when a template has changed and purge doesn't
@@ -43,17 +43,17 @@ class MWSite(object):
         """
         progress = 1
         for page in self.site.Pages['Kategori:'+category_name]:
-            print "nulledit_category: %s" % (progress)
+            print("nulledit_category: %s" % (progress))
             self.nulledit_page(page.page_title, summary)
             progress += 1
         
     def list_category(self, category):
         for page in self.site.Pages['Kategori:'+category]:
-            print "Page: %s" % (page.page_title)
+            print("Page: %s" % (page.page_title))
 
     def nuke_category(self, category):
         for page in self.site.Pages['Kategori:'+category]:
-            print "deleting %s..." % (page.page_title)
+            print("deleting %s..." % (page.page_title))
             page.delete()
         catpage_also = raw_input("Delete [[Category:%s]] also? y/n:" % (category))
         if catpage_also == "y":
@@ -70,4 +70,6 @@ class MWSite(object):
 
 if __name__ == '__main__':
     site = MWSite()
-    embed()
+#   embed()
+
+
