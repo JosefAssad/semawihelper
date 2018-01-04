@@ -10,6 +10,8 @@ class MWSite(object):
     def __init__(self):
         self.site = None
         self.connect()
+        self.rename_all()
+        
 
     def connect(self):
         hostname = input("Host:")
@@ -18,7 +20,7 @@ class MWSite(object):
         password = input("Pass:")
         self.site = mwclient.Site((hostname), path)
         self.site.login(username, password)
-
+        
         
     def purge_page(self, page_title):
         """Executes a purge action on page_title.
@@ -68,7 +70,7 @@ class MWSite(object):
         for page in self.site.Pages['Kategori:'+category]:
             print("deleting %s..." % (page.page_title))
             page.delete()
-        catpage_also = raw_input("Delete [[Category:%s]] also? y/n:" % (category))
+        catpage_also = input("Delete [[Category:%s]] also? y/n:" % (category))
         if catpage_also == "y":
             self.site.Pages["Category:%s" % (category)].delete()
 
@@ -80,20 +82,6 @@ class MWSite(object):
             allpageslist.append(page.page_title)
         return allpageslist
 
-    def allpages(self, start=None, prefix=None, namespace='0', filterredir='all', minsize=None, maxsize=None, prtype=None, prlevel=None, limit=None, dir='ascending', filterlanglinks='all', generator=True, end=None):
-        """Retrieve all pages on the wiki as a generator."""
-
-        pfx = listing.List.get_prefix('ap', generator)
-        kwargs = dict(listing.List.generate_kwargs(pfx, ('from', start), ('to', end), prefix=prefix,minsize=minsize, maxsize=maxsize, prtype=prtype, prlevel=prlevel,namespace=namespace, filterredir=filterredir, dir=dir,filterlanglinks=filterlanglinks)
-    )
-        return listing.List.get_list(generator)(self, 'allpages', 'ap', limit=limit, return_values='title',**kwargs)
-
-    
-    def list_allpages():
-        allpageslist =[]
-        for page in site.site.Pages: 
-            allpageslist.append(page.page_title)
-        return allpageslist
 
     def see_pages(self):
         for page in site.site.Pages:
@@ -105,16 +93,27 @@ class MWSite(object):
         oldname: The current property name
         newname: The desired property name
         """
-        list = []
-        list = site.list_allpages() 
-        i = 0
+        examinedpages = 0
         # Loop.
-        for item in list:
-        # check inside the page as a string
-            print(str(list[i]))
-            #x=site.site.Pages[page].text()
-            i +=1
-    
+        #go through all pages and replace:
+        for page in site.site.Pages:
+            text = page.text()
+            text = text.replace(oldname, newname)
+            page.save(text, summary='Changed value of '+ oldname + ' to '+ newname)
+            examinedpages +=1
+        print("Done! "+str(examinedpages)+' were checked for '+str(oldname))
+
+    def rename_all(self):
+        print('Wikihelper at Your service')
+        oldname = input('Please write the current property you would like to change: ')
+        newname = input('Now write the desired property to take its place: ')
+        print('Attention! All occurrances of '+str(oldname)+'will be replaced with '+str(newname))
+        accept = input('Do you wish to continue? Y/N')
+        if accept == 'y':
+            self.rename_property(oldname, newname)
+        
+
+        
 if __name__ == '__main__':
     site = MWSite()
     embed()
