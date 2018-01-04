@@ -80,12 +80,25 @@ class MWSite(object):
             allpageslist.append(page.page_title)
         return allpageslist
 
+    def allpages(self, start=None, prefix=None, namespace='0', filterredir='all', minsize=None, maxsize=None, prtype=None, prlevel=None, limit=None, dir='ascending', filterlanglinks='all', generator=True, end=None):
+        """Retrieve all pages on the wiki as a generator."""
+
+        pfx = listing.List.get_prefix('ap', generator)
+        kwargs = dict(listing.List.generate_kwargs(pfx, ('from', start), ('to', end), prefix=prefix,minsize=minsize, maxsize=maxsize, prtype=prtype, prlevel=prlevel,namespace=namespace, filterredir=filterredir, dir=dir,filterlanglinks=filterlanglinks)
+    )
+        return listing.List.get_list(generator)(self, 'allpages', 'ap', limit=limit, return_values='title',**kwargs)
+
+    
     def list_allpages():
         allpageslist =[]
         for page in site.site.Pages: 
             allpageslist.append(page.page_title)
         return allpageslist
 
+    def see_pages(self):
+        for page in site.site.Pages:
+            print(page)
+    
     def rename_property(self, oldname, newname):
         """for renaming semantic properties
         Arguments:
